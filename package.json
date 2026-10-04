@@ -1,10 +1,19 @@
 {
   "dependencies": {
+    "@arcjet/node": "^1.14.0",
     "@neondatabase/serverless": "^1.2.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "drizzle-orm": "^0.45.3",
     "express": "^5.2.1",
-    "winston": "^3.19.0"
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.12.1",
+    "pg": "^8.23.1",
+    "winston": "^3.19.0",
+    "zod": "^4.6.5"
   },
   "name": "acqusition",
   "version": "1.0.0",
@@ -19,17 +28,15 @@
     "prettier": "^3.9.9"
   },
   "imports": {
-
-  
-  "#controllers/*": "./src/controllers/*",
-  "#config/*": "./src/config/*",
-  "#routes/*": "./src/routes/*",
-  "#services/*": "./src/services/*",
-  "#models/*": "./src/models/*",
-  "#utils/*": "./src/util/*",
-  "#validations/*": "./src/validations/*"
-
-    
+    "#controllers/*": "./src/controllers/*",
+    "#config/*": "./src/config/*",
+    "#routes/*": "./src/routes/*",
+    "#services/*": "./src/services/*",
+    "#models/*": "./src/models/*",
+    "#utils/*": "./src/util/*",
+    "#util/*": "./src/util/*",
+    "#validations/*": "./src/validations/*",
+    "#middleware/*": "./src/middleware/*"
   },
   "scripts": {
     "dev": "node --watch src/index.js",
@@ -40,7 +47,8 @@
     "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev:docker": "sh ./scripts/dev.sh"
   },
   "repository": {
     "type": "git",

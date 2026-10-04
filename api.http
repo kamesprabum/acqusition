@@ -1,0 +1,30 @@
+### Home
+GET http://localhost:3000/
+
+### Health
+GET http://localhost:3000/health
+
+### Healthz
+GET http://localhost:3000/healthz
+
+### Sign Up
+POST http://localhost:3000/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Test User2",
+  "email": "test2@example.com",
+  "password": "password123"
+}
+
+### Sign In
+POST http://localhost:3000/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "password123"
+}
+
+### Sign Out
+POST http://localhost:3000/api/auth/sign-out

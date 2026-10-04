@@ -1,11 +1,11 @@
-import express from "express";
-import logger from "./config/logger.js";
-import morgan from "morgan";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import helmet from "helmet";
+import express from 'express';
+import logger from './config/logger.js';
+import morgan from 'morgan';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
-import authRoutes from "./routes/auth.routes.js";
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
@@ -15,17 +15,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-  morgan("combined", {
+  morgan('combined', {
     stream: {
-      write: (message) => logger.info(message.trim()),
+      write: message => logger.info(message.trim()),
     },
   })
 );
 
 app.use(helmet());
 
-app.get("/", (req, res) => {
-  logger.info("Hello from acquisition!");
+app.get('/', (req, res) => {
+  logger.info('Hello from acquisition!');
 
   res.status(200).send(`
     <h1 style="font-family: Helvetica;">
@@ -34,20 +34,20 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.get("/health", (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).json({
-    status: "ok",
+    status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
 });
 
-app.get("/healthz", (req, res) => {
+app.get('/healthz', (req, res) => {
   res.status(200).json({
-    message: "Acquisition API is healthy",
+    message: 'Acquisition API is healthy',
   });
 });
 
-app.use("/api/auth", authRoutes);
+app.use('/api/auth', authRoutes);
 
 export default app;

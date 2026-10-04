@@ -71,6 +71,9 @@ web_modules/
 !.env.example
 !.env.local.example
 
+# Neon Local metadata directory
+.neon_local/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

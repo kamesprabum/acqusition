@@ -1,0 +1,44 @@
+# ==============================================================================
+# Production Environment: Docker Compose with Neon Cloud Database
+# ==============================================================================
+# In production, the app connects directly to the serverless Neon Cloud Postgres
+# instance over SSL. No local proxy (neon-local) is used.
+# ==============================================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: acqusition-app-prod
+    restart: always
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:' + (process.env.PORT || 3000) + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - acqusition-prod-net
+
+networks:
+  acqusition-prod-net:
+    driver: bridge

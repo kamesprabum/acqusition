@@ -1,0 +1,61 @@
+# ==============================================================================
+# Development Environment: Docker Compose with Neon Local
+# ==============================================================================
+# Runs the local application with hot-reloading alongside the Neon Local proxy.
+# Ephemeral branches are automatically created on container start and torn down on stop.
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # Neon Local Proxy
+  # Routes local Postgres/HTTP connections to an ephemeral Neon cloud branch
+  # ----------------------------------------------------------------------------
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: acqusition-neon-local
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.development
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -p 5432']
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - acqusition-net
+
+  # ----------------------------------------------------------------------------
+  # Application (Development Mode)
+  # Watches src/ for live code changes and connects to neon-local:5432
+  # ----------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: acqusition-app-dev
+    restart: unless-stopped
+    depends_on:
+      neon-local:
+        condition: service_healthy
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file:
+      - .env.development
+    environment:
+      NODE_ENV: development
+    volumes:
+      # Live reload bind mounts
+      - ./src:/app/src
+      - ./drizzle:/app/drizzle
+      - ./package.json:/app/package.json:ro
+      - ./drizzle.config.js:/app/drizzle.config.js:ro
+    networks:
+      - acqusition-net
+
+networks:
+  acqusition-net:
+    driver: bridge
